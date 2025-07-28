@@ -72,9 +72,9 @@ st.markdown(
 )
 # Inisialisasi default state (agar tidak error saat pertama kali dibuka)
 if "nama_bearing" not in st.session_state:
-    st.session_state.nama_bearing = ""
+    st.session_state.input_nama = ""
 if "suhu_bearing" not in st.session_state:
-    st.session_state.suhu_bearing = 0
+    st.session_state.input_suhu = 0
     
 # Judul Aplikasi
 st.markdown("<h1 style='color: white;'>📈 Pencatatan Suhu Bearing</h1>", unsafe_allow_html=True)
