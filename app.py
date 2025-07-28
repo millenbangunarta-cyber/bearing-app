@@ -2,26 +2,28 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-import os
-import io
 from datetime import datetime
 from pytz import timezone
+import os
+import io
 
 # Fungsi untuk mencatat data bearing dan suhu, serta membuat grafik
 def catat_data(nama_bearing, suhu_bearing):
+    # Gunakan zona waktu Kalimantan Timur (WITA)
     tz = timezone('Asia/Makassar')
     waktu_input = datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
     
-    # Validasi suhu (misalnya suhu tinggi lebih dari 100 derajat dianggap warning)
-    if suhu_bearing > 60:
+    # Validasi suhu
+    if suhu_bearing > 100:
         validasi_suhu = "Warning: Suhu terlalu tinggi!"
     else:
         validasi_suhu = "Suhu normal."
     
-    # Simpan data ke dalam DataFrame
-    data = pd.DataFrame([[waktu_input, nama_bearing, suhu_bearing, validasi_suhu]], columns=["Waktu", "Nama Bearing", "Suhu Bearing", "Status"])
+    # Simpan data ke DataFrame
+    data = pd.DataFrame([[waktu_input, nama_bearing, suhu_bearing, validasi_suhu]],
+                        columns=["Waktu", "Nama Bearing", "Suhu Bearing", "Status"])
 
-    # Jika file CSV sudah ada, tambahkan data baru, jika belum buat file baru
+    # Simpan ke file CSV
     if os.path.exists("data_bearing.csv"):
         data.to_csv("data_bearing.csv", mode='a', header=False, index=False)
     else:
@@ -30,35 +32,67 @@ def catat_data(nama_bearing, suhu_bearing):
     # Membuat grafik suhu
     fig, ax = plt.subplots()
     df = pd.read_csv("data_bearing.csv")
+    
+    # Filter grafik berdasarkan nama bearing yang sama
+    df = df[df["Nama Bearing"] == nama_bearing]
+    
     ax.plot(pd.to_datetime(df["Waktu"]), df["Suhu Bearing"], marker='o', color='b', label="Suhu Bearing")
     ax.set_xlabel("Waktu")
     ax.set_ylabel("Suhu (°C)")
-    ax.set_title(f"Tren Suhu Bearing {nama_bearing}")
+    ax.set_title(f"Tren Suhu Bearing: {nama_bearing}")
     ax.legend()
 
-    # Simpan grafik ke dalam format BytesIO untuk ditampilkan di Streamlit
+    # Simpan grafik ke BytesIO
     buf = io.BytesIO()
     fig.savefig(buf, format="png")
     buf.seek(0)
     
-    return f"Data berhasil disimpan! Waktu: {waktu_input}, Bearing: {nama_bearing}, Suhu: {suhu_bearing}, Status: {validasi_suhu}", buf
+    return f"Data berhasil disimpan!\nWaktu: {waktu_input}\nBearing: {nama_bearing}\nSuhu: {suhu_bearing}°C\nStatus: {validasi_suhu}", buf
 
-# Streamlit App
-st.title('Pencatatan Suhu Bearing')  # Judul Aplikasi
+# --- Streamlit App ---
 
-# Input untuk Nama Bearing dan Suhu Bearing
-nama_bearing = st.text_input('Nama Bearing')  # Input untuk nama bearing
-suhu_bearing = st.number_input('Suhu Bearing (°C)', min_value=-100, max_value=200)  # Input untuk suhu
+# Tambahkan styling background
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-image: url("hhttps://unsplash.com/id/foto/SrdzZYKyiPY");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
 
-# Tombol untuk mengirim data
+# Judul Aplikasi
+st.title('📈 Pencatatan Suhu Bearing')
+
+# Input pengguna
+nama_bearing = st.text_input('🔧 Nama Bearing')
+suhu_bearing = st.number_input('🌡️ Suhu Bearing (°C)', min_value=-100, max_value=200)
+
+# Tombol submit
 if st.button('Submit'):
-    result, chart = catat_data(nama_bearing, suhu_bearing)
-    st.write(result)  # Menampilkan hasil input
-    st.image(chart)  # Menampilkan grafik suhu
+    if nama_bearing.strip() == "":
+        st.warning("Nama bearing tidak boleh kosong.")
+    else:
+        result, chart = catat_data(nama_bearing, suhu_bearing)
+        st.success(result)
+        st.image(chart)
 
-# Tombol untuk mengunduh Data CSV
-if st.button('Unduh Data CSV'):
+# Tombol download CSV
+if os.path.exists("data_bearing.csv"):
     with open("data_bearing.csv", "rb") as file:
-        st.download_button(label="Download CSV", data=file, file_name="data_bearing.csv")
+        st.download_button(label="📥 Unduh Data CSV", data=file, file_name="data_bearing.csv")
 
-
+# Footer / Copyright
+st.markdown(
+    """
+    <hr style="margin-top: 50px; margin-bottom: 10px;">
+    <div style="text-align: center; color: gray; font-size: small;">
+        &copy; 2025 Aplikasi Pencatatan Suhu Bearing - Made with ❤️ by millen as a planner BEP
+    </div>
+    """,
+    unsafe_allow_html=True
+)
