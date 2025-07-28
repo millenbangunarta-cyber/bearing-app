@@ -76,6 +76,7 @@ if "nama_bearing" not in st.session_state:
 if "suhu_bearing" not in st.session_state:
     st.session_state.suhu_bearing = 0
     
+    
 # Judul Aplikasi
 st.markdown("<h1 style='color: white;'>📈 Pencatatan Suhu Bearing</h1>", unsafe_allow_html=True)
 
@@ -98,6 +99,7 @@ if st.button('Submit'):
         # Reset input otomatis setelah submit
         st.session_state.nama_bearing = ""
         st.session_state.suhu_bearing = 0
+        st.experimental_rerun()
 
 # Tombol download CSV
 if os.path.exists("data_bearing.csv"):
