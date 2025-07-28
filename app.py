@@ -84,8 +84,12 @@ if st.button('Submit'):
         st.warning("Nama bearing tidak boleh kosong.")
     else:
         result, chart = catat_data(nama_bearing, suhu_bearing)
+        # result otomatis setelah submit
         st.success(result)
         st.image(chart)
+        # Reset input otomatis setelah submit
+        st.session_state.input_nama = ""
+        st.session_state.input_suhu = 0
 
 # Tombol download CSV
 if os.path.exists("data_bearing.csv"):
