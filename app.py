@@ -74,7 +74,7 @@ st.markdown(
 if "nama_bearing" not in st.session_state:
     st.session_state.nama_bearing = ""
 if "suhu_bearing" not in st.session_state:
-    st.session_state.suhu_bearing = 0
+    st.session_state.suhu_bearing = ""
 if "submit_result" not in st.session_state:
     st.session_state.submit_result = None
 if "submit_chart" not in st.session_state:
@@ -103,7 +103,7 @@ def submit_callback():
 
         # Reset input
         st.session_state.nama_bearing = ""
-        st.session_state.suhu_bearing = 0
+        st.session_state.suhu_bearing = ""
 
 # Tombol submit
 st.button("Submit", on_click=submit_callback)
