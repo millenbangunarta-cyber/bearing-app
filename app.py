@@ -25,7 +25,7 @@ def catat_data(nama_part, suhu_part):
                         columns=["Waktu", "Nama part", "Suhu part", "Status"])
 
     # Simpan ke file CSV
-    if os.path.exists("data_suhu.csv"):
+    if os.path.exists("data_part.csv"):
         data.to_csv("data_part.csv", mode='a', header=False, index=False)
     else:
         data.to_csv("data_part.csv", index=False)
