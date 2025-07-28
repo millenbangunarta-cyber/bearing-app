@@ -13,7 +13,7 @@ def catat_data(nama_bearing, suhu_bearing):
     waktu_input = datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
     
     # Validasi suhu (misalnya suhu tinggi lebih dari 100 derajat dianggap warning)
-    if suhu_bearing > 100:
+    if suhu_bearing > 60:
         validasi_suhu = "Warning: Suhu terlalu tinggi!"
     else:
         validasi_suhu = "Suhu normal."
