@@ -71,7 +71,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 # Inisialisasi default state (agar tidak error saat pertama kali dibuka)
-if "ama_bearing" not in st.session_state:
+if "nama_bearing" not in st.session_state:
     st.session_state.nama_bearing = ""
 if "suhu_bearing" not in st.session_state:
     st.session_state.suhu_bearing = 0
