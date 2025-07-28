@@ -84,20 +84,24 @@ st.markdown("<h1 style='color: white;'>📈 Pencatatan Suhu Bearing</h1>", unsaf
 nama_bearing = st.text_input('🔧 Nama Bearing', value=st.session_state.nama_bearing, key="nama_bearing")
 suhu_bearing = st.number_input('🌡️ Suhu Bearing (°C)', min_value=-100, max_value=200, value=st.session_state.suhu_bearing, key="suhu_bearing")
 
-# Tombol submit
+# Fungsi ketika tombol submit ditekan
 def submit_callback():
     if st.session_state.nama_bearing.strip() == "":
-        st.warning("Nama bearing tidak boleh kosong.")
+        st.session_state.submit_result = "warning"
+        st.session_state.submit_chart = None
     else:
-        result, chart = catat_data(st.session_state.nama_bearing, st.session_state.suhu_bearing)
-        st.success(result)
-        st.image(chart)
+        result, chart = catat_data(
+            st.session_state.nama_bearing,
+            st.session_state.suhu_bearing
+        )
+        st.session_state.submit_result = result
+        st.session_state.submit_chart = chart
 
-        # Reset nilai menggunakan session_state
+        # Reset input
         st.session_state.nama_bearing = ""
         st.session_state.suhu_bearing = 0
 
-# Tombol Submit dengan Callback
+# Tombol submit
 st.button("Submit", on_click=submit_callback)
 # Tombol download CSV
 if os.path.exists("data_bearing.csv"):
