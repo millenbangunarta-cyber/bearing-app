@@ -72,16 +72,16 @@ st.markdown(
 )
 # Inisialisasi default state (agar tidak error saat pertama kali dibuka)
 if "nama_bearing" not in st.session_state:
-    st.session_state.input_nama = ""
+    st.session_state.nama_bearing = ""
 if "suhu_bearing" not in st.session_state:
-    st.session_state.input_suhu = 0
+    st.session_state.suhu_bearing = 0
     
 # Judul Aplikasi
 st.markdown("<h1 style='color: white;'>📈 Pencatatan Suhu Bearing</h1>", unsafe_allow_html=True)
 
 # Input pengguna
-nama_bearing = st.text_input('🔧 Nama Bearing', value=st.session_state.nama_bearing, key="input_nama")
-suhu_bearing = st.number_input('🌡️ Suhu Bearing (°C)', min_value=-100, max_value=200, value=st.session_state.suhu_bearing, key="input_suhu")
+nama_bearing = st.text_input('🔧 Nama Bearing', value=st.session_state.nama_bearing, key="nama_bearing")
+suhu_bearing = st.number_input('🌡️ Suhu Bearing (°C)', min_value=-100, max_value=200, value=st.session_state.suhu_bearing, key="suhu_bearing")
 
 # Tombol submit
 if st.button('Submit'):
@@ -96,8 +96,8 @@ if st.button('Submit'):
         st.success(result)
         st.image(chart)
         # Reset input otomatis setelah submit
-        st.session_state.input_nama = ""
-        st.session_state.input_suhu = 0
+        st.session_state.nama_bearing = ""
+        st.session_state.suhu_bearing = 0
 
 # Tombol download CSV
 if os.path.exists("data_bearing.csv"):
