@@ -85,8 +85,8 @@ suhu_bearing = st.number_input('🌡️ Suhu Bearing (°C)', min_value=-100, max
 
 # Tombol submit
 if st.button('Submit'):
- nama_bearing = st.session_state.input_nama
-  suhu_bearing = st.session_state.input_suhu
+    nama_bearing = st.session_state.input_nama
+    suhu_bearing = st.session_state.input_suhu
 
     if nama_bearing.strip() == "":
         st.warning("Nama bearing tidak boleh kosong.")
