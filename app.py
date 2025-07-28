@@ -56,14 +56,14 @@ st.markdown(
     """
     <style>
     .stApp {
-        background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+        background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
             url("https://raw.githubusercontent.com/millenbangunarta-cyber/bearing-app/main/IMG_1714.jpg");
         background-size: cover;
         background-repeat: no-repeat;
         background-attachment: fixed;
     }
        label {
-        color: red !important;  /* Ganti warna teks input di sini */
+        color: white !important;  /* Ganti warna teks input di sini */
         font-weight: bold;
     }
     </style>
@@ -72,7 +72,7 @@ st.markdown(
 )
 
 # Judul Aplikasi
-st.markdown("<h1 style='color: red;'>📈 Pencatatan Suhu Bearing</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='color: white;'>📈 Pencatatan Suhu Bearing</h1>", unsafe_allow_html=True)
 
 # Input pengguna
 nama_bearing = st.text_input('🔧 Nama Bearing')
