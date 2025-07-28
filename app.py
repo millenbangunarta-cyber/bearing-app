@@ -61,13 +61,17 @@ st.markdown(
         background-repeat: no-repeat;
         background-attachment: fixed;
     }
+       label {
+        color: red !important;  /* Ganti warna teks input di sini */
+        font-weight: bold;
+    }
     </style>
     """,
     unsafe_allow_html=True
 )
 
 # Judul Aplikasi
-st.title('📈 Pencatatan Suhu Bearing')
+st.markdown("<h1 style='color: red;'>📈 Pencatatan Suhu Bearing</h1>", unsafe_allow_html=True)
 
 # Input pengguna
 nama_bearing = st.text_input('🔧 Nama Bearing')
