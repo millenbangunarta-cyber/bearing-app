@@ -102,13 +102,13 @@ if nama_bearing and bearing_list:
     match = difflib.get_close_matches(nama_bearing, bearing_list, n=1, cutoff=0.8)
     if match:
         suggested = match[0]
-        st.info(f"Nama bearing dikoreksi otomatis menjadi: **{suggested}**")
-        nama_bearing = suggested
+        if suggested != nama_bearing:
+            st.info(f"Nama bearing dikoreksi otomatis menjadi: **{suggested}**")
+        nama_bearing_final = suggested
     else:
-        nama_bearing = nama_input
-
-# Set ulang session_state
-st.session_state.nama_bearing = nama_bearing
+        nama_bearing_final = nama_bearing
+else:
+    nama_bearing_final = nama_bearing
 
 # Input pengguna
 suhu_bearing = st.number_input('🌡️ Suhu Bearing (°C)', min_value=-100, max_value=200, value=st.session_state.suhu_bearing, key="suhu_bearing")
@@ -120,9 +120,10 @@ def submit_callback():
         st.session_state.submit_chart = None
     else:
         result, chart = catat_data(
-            st.session_state.nama_bearing,
-            st.session_state.suhu_bearing
+        nama_bearing_final,
+        st.session_state.suhu_bearing
         )
+
         st.session_state.submit_result = result
         st.session_state.submit_chart = chart
 
