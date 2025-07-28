@@ -56,7 +56,7 @@ st.markdown(
     """
     <style>
     .stApp {
-        background-image: url("hhttps://unsplash.com/id/foto/SrdzZYKyiPY");
+        background-image: url("https://raw.githubusercontent.com/millenbangunarta-cyber/bearing-app/main/IMG_1714.jpg");
         background-size: cover;
         background-repeat: no-repeat;
         background-attachment: fixed;
