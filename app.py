@@ -64,6 +64,7 @@ st.markdown(
     </style>
     """,
     unsafe_allow_html=True
+)
 
 # Judul Aplikasi
 st.title('📈 Pencatatan Suhu Bearing')
