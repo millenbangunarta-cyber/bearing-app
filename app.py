@@ -85,22 +85,20 @@ nama_bearing = st.text_input('🔧 Nama Bearing', value=st.session_state.nama_be
 suhu_bearing = st.number_input('🌡️ Suhu Bearing (°C)', min_value=-100, max_value=200, value=st.session_state.suhu_bearing, key="suhu_bearing")
 
 # Tombol submit
-if st.button('Submit'):
-    nama_bearing = st.session_state.nama_bearing
-    suhu_bearing = st.session_state.suhu_bearing
-
-    if nama_bearing.strip() == "":
+def submit_callback():
+    if st.session_state.nama_bearing.strip() == "":
         st.warning("Nama bearing tidak boleh kosong.")
     else:
-        result, chart = catat_data(nama_bearing, suhu_bearing)
-        # result otomatis setelah submit
+        result, chart = catat_data(st.session_state.nama_bearing, st.session_state.suhu_bearing)
         st.success(result)
         st.image(chart)
-        # Reset input otomatis setelah submit
+
+        # Reset nilai menggunakan session_state
         st.session_state.nama_bearing = ""
         st.session_state.suhu_bearing = 0
-        st.experimental_rerun()
 
+# Tombol Submit dengan Callback
+st.button("Submit", on_click=submit_callback)
 # Tombol download CSV
 if os.path.exists("data_bearing.csv"):
     with open("data_bearing.csv", "rb") as file:
