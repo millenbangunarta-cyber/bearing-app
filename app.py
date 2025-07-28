@@ -71,7 +71,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 # Inisialisasi default state (agar tidak error saat pertama kali dibuka)
-if "nama_bearing" not in st.session_state:
+if "ama_bearing" not in st.session_state:
     st.session_state.nama_bearing = ""
 if "suhu_bearing" not in st.session_state:
     st.session_state.suhu_bearing = 0
@@ -85,6 +85,8 @@ suhu_bearing = st.number_input('🌡️ Suhu Bearing (°C)', min_value=-100, max
 
 # Tombol submit
 if st.button('Submit'):
+        nama_bearing = st.session_state.input_nama
+        suhu_bearing = st.session_state.input_suhu
     if nama_bearing.strip() == "":
         st.warning("Nama bearing tidak boleh kosong.")
     else:
