@@ -70,11 +70,15 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-# Inisialisasi default state (agar tidak error saat pertama kali dibuka)
+# --- INISIALISASI SESSION STATE ---
 if "nama_bearing" not in st.session_state:
     st.session_state.nama_bearing = ""
 if "suhu_bearing" not in st.session_state:
     st.session_state.suhu_bearing = 0
+if "submit_result" not in st.session_state:
+    st.session_state.submit_result = None
+if "submit_chart" not in st.session_state:
+    st.session_state.submit_chart = None
     
     
 # Judul Aplikasi
