@@ -70,13 +70,18 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
+# Inisialisasi default state (agar tidak error saat pertama kali dibuka)
+if "nama_bearing" not in st.session_state:
+    st.session_state.nama_bearing = ""
+if "suhu_bearing" not in st.session_state:
+    st.session_state.suhu_bearing = 0
+    
 # Judul Aplikasi
 st.markdown("<h1 style='color: white;'>📈 Pencatatan Suhu Bearing</h1>", unsafe_allow_html=True)
 
 # Input pengguna
-nama_bearing = st.text_input('🔧 Nama Bearing')
-suhu_bearing = st.number_input('🌡️ Suhu Bearing (°C)', min_value=-100, max_value=200)
+nama_bearing = st.text_input('🔧 Nama Bearing', value=st.session_state.nama_bearing, key="input_nama")
+suhu_bearing = st.number_input('🌡️ Suhu Bearing (°C)', min_value=-100, max_value=200, value=st.session_state.suhu_bearing, key="input_suhu")
 
 # Tombol submit
 if st.button('Submit'):
