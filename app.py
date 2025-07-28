@@ -6,6 +6,7 @@ from datetime import datetime
 from pytz import timezone
 import os
 import io
+import difflib
 
 # Fungsi untuk mencatat data bearing dan suhu, serta membuat grafik
 def catat_data(nama_bearing, suhu_bearing):
@@ -84,8 +85,28 @@ if "submit_chart" not in st.session_state:
 # Judul Aplikasi
 st.markdown("<h1 style='color: white;'>📈 Pencatatan Suhu Bearing</h1>", unsafe_allow_html=True)
 
+# Ambil daftar bearing untuk auto-complete
+bearing_list = []
+if os.path.exists("data_bearing.csv"):
+    df_existing = pd.read_csv("data_bearing.csv")
+    bearing_list = sorted(df_existing["Nama Bearing"].dropna().unique().tolist())
+
+# Input nama bearing dengan selectbox + text_input
+nama_terpilih = st.selectbox("🔧 Pilih Nama Bearing (Opsional)", options=[""] + bearing_list)
+nama_manual = st.text_input("📝 Atau Tulis Nama Bearing Baru", value=st.session_state.nama_bearing)
+
+# Final nama bearing yang akan digunakan
+nama_bearing = nama_manual.strip() if nama_manual.strip() else nama_terpilih
+
+# Auto-koreksi jika tidak persis dan mirip dengan data sebelumnya
+if nama_bearing and nama_bearing not in bearing_list:
+    terdekat = difflib.get_close_matches(nama_bearing, bearing_list, n=1)
+    if terdekat:
+        st.info(f"🔄 Koreksi otomatis: '{nama_bearing}' → '{terdekat[0]}'")
+        nama_bearing = terdekat[0]
+
+
 # Input pengguna
-nama_bearing = st.text_input('🔧 Nama Bearing', value=st.session_state.nama_bearing, key="nama_bearing")
 suhu_bearing = st.number_input('🌡️ Suhu Bearing (°C)', min_value=-100, max_value=200, value=st.session_state.suhu_bearing, key="suhu_bearing")
 
 # Fungsi ketika tombol submit ditekan
