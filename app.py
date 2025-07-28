@@ -6,7 +6,6 @@ from datetime import datetime
 from pytz import timezone
 import os
 import io
-import difflib
 
 # Fungsi untuk mencatat data bearing dan suhu, serta membuat grafik
 def catat_data(nama_bearing, suhu_bearing):
@@ -84,14 +83,6 @@ if "submit_chart" not in st.session_state:
     
 # Judul Aplikasi
 st.markdown("<h1 style='color: white;'>📈 Pencatatan Suhu Bearing</h1>", unsafe_allow_html=True)
-
-# Auto-koreksi jika tidak persis dan mirip dengan data sebelumnya
-if nama_bearing and nama_bearing not in bearing_list:
-    terdekat = difflib.get_close_matches(nama_bearing, bearing_list, n=1)
-    if terdekat:
-        st.info(f"🔄 Koreksi otomatis: '{nama_bearing}' → '{terdekat[0]}'")
-        nama_bearing = terdekat[0]
-
 
 # Input pengguna
 nama_bearing = st.text_input('🔧 Nama Bearing', value=st.session_state.nama_bearing, key="nama_bearing")
