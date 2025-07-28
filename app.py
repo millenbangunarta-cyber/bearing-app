@@ -56,7 +56,8 @@ st.markdown(
     """
     <style>
     .stApp {
-        background-image: url("https://raw.githubusercontent.com/millenbangunarta-cyber/bearing-app/main/IMG_1714.jpg");
+        background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+            url("https://raw.githubusercontent.com/millenbangunarta-cyber/bearing-app/main/IMG_1714.jpg");
         background-size: cover;
         background-repeat: no-repeat;
         background-attachment: fixed;
