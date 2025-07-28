@@ -2,13 +2,14 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-from datetime import datetime
 import os
 import io
+from pytz import timezone
 
 # Fungsi untuk mencatat data bearing dan suhu, serta membuat grafik
 def catat_data(nama_bearing, suhu_bearing):
-    waktu_input = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    tz = timezone('Asia/Makassar')
+    waktu_input = datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
     
     # Validasi suhu (misalnya suhu tinggi lebih dari 100 derajat dianggap warning)
     if suhu_bearing > 100:
