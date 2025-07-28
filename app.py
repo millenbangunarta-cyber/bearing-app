@@ -103,6 +103,16 @@ def submit_callback():
 
 # Tombol submit
 st.button("Submit", on_click=submit_callback)
+
+# Tampilkan hasil jika ada
+if st.session_state.submit_result:
+    if st.session_state.submit_result == "warning":
+        st.warning("Nama bearing tidak boleh kosong.")
+    else:
+        st.success(st.session_state.submit_result)
+        if st.session_state.submit_chart:
+            st.image(st.session_state.submit_chart)
+
 # Tombol download CSV
 if os.path.exists("data_bearing.csv"):
     with open("data_bearing.csv", "rb") as file:
