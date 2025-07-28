@@ -35,9 +35,9 @@ def catat_data(nama_part, suhu_part):
     df = pd.read_csv("data_part.csv")
     
     # Filter grafik berdasarkan nama bearing yang sama
-    df = df[df["Nama Part"] == nama_part]
+    df = df[df["Nama part"] == nama_part]
     
-    ax.plot(pd.to_datetime(df["Waktu"]), df["Suhu Part"], marker='o', color='b', label="Suhu Part")
+    ax.plot(pd.to_datetime(df["Waktu"]), df["Suhu part"], marker='o', color='b', label="Suhu Part")
     ax.set_xlabel("Waktu")
     ax.set_ylabel("Suhu (°C)")
     ax.set_title(f"Tren Suhu Part: {nama_part}")
@@ -63,14 +63,15 @@ st.markdown(
         background-repeat: no-repeat;
         background-attachment: fixed;
     }
-       label {
-        color: white !important;  /* Ganti warna teks input di sini */
+    label {
+        color: white !important;
         font-weight: bold;
     }
     </style>
     """,
     unsafe_allow_html=True
 )
+
 # --- INISIALISASI SESSION STATE ---
 if "nama_part" not in st.session_state:
     st.session_state.nama_part = ""
@@ -80,25 +81,27 @@ if "submit_result" not in st.session_state:
     st.session_state.submit_result = None
 if "submit_chart" not in st.session_state:
     st.session_state.submit_chart = None
-    
-    
+
 # Judul Aplikasi
 st.markdown("<h1 style='color: white;'>📈 Pencatatan Suhu Part</h1>", unsafe_allow_html=True)
 
 # Ambil daftar nama bearing dari file CSV (jika ada)
-bearing_list = []
+part_list = []
 if os.path.exists("data_part.csv"):
-    df_all = pd.read_csv("data_part.csv")
-    part_list = sorted(df_all["Nama Part"].dropna().unique().tolist())
+    try:
+        df_all = pd.read_csv("data_part.csv")
+        part_list = sorted(df_all["Nama part"].dropna().unique().tolist())
+    except Exception as e:
+        st.error(f"Gagal membaca data_part.csv: {e}")
 
 # Input manual dari pengguna
 input_nama_part = st.text_input('🔧 Nama Part', value=st.session_state.nama_part, key="nama_part")
 
-# Koreksi ejaan otomatis
+# Koreksi ejaan otomatis (jika data part tersedia)
 nama_part = input_nama_part.strip()
 nama_part_final = nama_part  # default tanpa koreksi
 
-if nama_part:
+if nama_part and part_list:
     match = difflib.get_close_matches(nama_part, part_list, n=1, cutoff=0.8)
     if match:
         corrected = match[0]
@@ -106,7 +109,7 @@ if nama_part:
             st.info(f"Nama part dikoreksi menjadi: **{corrected}**")
             nama_part_final = corrected
 
-# Input pengguna
+# Input suhu
 suhu_part = st.number_input('🌡️ Suhu Part (°C)', min_value=-100, max_value=200, value=st.session_state.suhu_part, key="suhu_part")
 
 # Fungsi ketika tombol submit ditekan
@@ -115,11 +118,7 @@ def submit_callback():
         st.session_state.submit_result = "warning"
         st.session_state.submit_chart = None
     else:
-        result, chart = catat_data(
-        nama_part_final,
-        st.session_state.suhu_part
-        )
-
+        result, chart = catat_data(nama_part_final, st.session_state.suhu_part)
         st.session_state.submit_result = result
         st.session_state.submit_chart = chart
 
