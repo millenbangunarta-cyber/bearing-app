@@ -34,10 +34,14 @@ def catat_data(nama_part, suhu_part):
     fig, ax = plt.subplots()
     df = pd.read_csv("data_part.csv")
     
+    # Pastikan waktu jadi datetime
+    df["Waktu"] = pd.to_datetime(df["Waktu"], errors="coerce")
+
     # Filter grafik berdasarkan nama bearing yang sama
     df = df[df["Nama part"] == nama_part]
     
-    ax.plot(pd.to_datetime(df["Waktu"]), df["Suhu part"], marker='o', color='b', label="Suhu Part")
+    ax.plot(df["Waktu"], df["Suhu part"], marker='o', color='b', label="Suhu Part")
+    ax.axhline(y=100, color='r', linestyle='--', label="Batas Aman")
     ax.set_xlabel("Waktu")
     ax.set_ylabel("Suhu (°C)")
     ax.set_title(f"Tren Suhu Part: {nama_part}")
@@ -81,6 +85,8 @@ if "submit_result" not in st.session_state:
     st.session_state.submit_result = None
 if "submit_chart" not in st.session_state:
     st.session_state.submit_chart = None
+if "nama_part_final" not in st.session_state:
+    st.session_state.nama_part_final = ""
 
 # Judul Aplikasi
 st.markdown("<h1 style='color: white;'>📈 Pencatatan Suhu Part</h1>", unsafe_allow_html=True)
@@ -97,34 +103,43 @@ if os.path.exists("data_part.csv"):
 # Input manual dari pengguna
 input_nama_part = st.text_input('🔧 Nama Part', value=st.session_state.nama_part, key="nama_part")
 
-# Koreksi ejaan otomatis (jika data part tersedia)
+# Koreksi ejaan dengan izin user
 nama_part = input_nama_part.strip()
-nama_part_final = nama_part  # default tanpa koreksi
+st.session_state.nama_part_final = nama_part  # default pakai input asli
 
 if nama_part and part_list:
     match = difflib.get_close_matches(nama_part, part_list, n=1, cutoff=0.8)
     if match:
         corrected = match[0]
         if corrected.lower() != nama_part.lower():
-            st.info(f"Nama part dikoreksi menjadi: **{corrected}**")
-            nama_part_final = corrected
+            st.info(f"Apakah maksud Anda: **{corrected}** ?")
+            use_correction = st.radio(
+                "Gunakan hasil koreksi?",
+                ["Tidak", "Ya"],
+                key="confirm_correction"
+            )
+            if use_correction == "Ya":
+                st.session_state.nama_part_final = corrected
+            else:
+                st.session_state.nama_part_final = nama_part
 
 # Input suhu
 suhu_part = st.number_input('🌡️ Suhu Part (°C)', min_value=-100, max_value=200, value=st.session_state.suhu_part, key="suhu_part")
 
 # Fungsi ketika tombol submit ditekan
 def submit_callback():
-    if st.session_state.nama_part.strip() == "":
+    if st.session_state.nama_part_final.strip() == "":
         st.session_state.submit_result = "warning"
         st.session_state.submit_chart = None
     else:
-        result, chart = catat_data(nama_part_final, st.session_state.suhu_part)
+        result, chart = catat_data(st.session_state.nama_part_final, st.session_state.suhu_part)
         st.session_state.submit_result = result
         st.session_state.submit_chart = chart
 
         # Reset input
         st.session_state.nama_part = ""
         st.session_state.suhu_part = 0
+        st.session_state.nama_part_final = ""
 
 # Tombol submit
 st.button("Submit", on_click=submit_callback)
